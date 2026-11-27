@@ -386,7 +386,8 @@ canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 @keyframes khurt2{20%{transform:translateY(5%) rotate(-3deg)}40%{transform:translateX(-4%)}60%{transform:translateX(3%)}}
 #scrAdv .me{left:3%!important;width:48%!important;top:calc(60% - 34px)!important}
 #scrAdv .foes{z-index:2}
-#scrAdv .bbg .art{object-position:50% 70%}
+#scrAdv .bbg .art{object-position:50% 100%}
+#scrAdv .stage .ksh{position:absolute;left:29.5%;bottom:6%;width:17%;height:3.2%;border-radius:50%;background:radial-gradient(#0007,#0000 70%);transform-origin:50% 50%;z-index:1}
 /* tower */
 #scrTower .hp{color:#ff7a8a;letter-spacing:1px}
 #scrTower .boss{top:44px;left:6px;right:6px;padding:5px 9px}
@@ -1705,7 +1706,7 @@ let B=null,busy=false;
 function mkFoe(k){const d=FOES[k];const fl=S&&S.pos!=null?nodeById(S.pos).f:1,heat=S?S.heat||0:0;const hp=Math.round(ri(d.hp[0],d.hp[1])*(1+.035*(fl-1))*(1+.12*heat));const bonus=Math.floor((fl-1)/5)+Math.floor(heat/2);return {k,n:d.n,hp,max:hp,block:0,st:{thorns:d.thorns||0,str:bonus||0},ai:d.ai,i:0,boss:d.boss,elite:d.elite,dead:false,split:false}}
 function startBattle(keys,kind){
   B={kind:kind||'fight',foes:keys.map(mkFoe),p:{block:0,st:{},energy:3},draw:shuffle(S.deck.map(c=>({...c}))),hand:[],disc:[],ex:[],turn:0,firstAtk:S.relics.includes('whet')};
-  view('vBattle');art($('bBg'),'bg_battle1.webp','');$('foes').innerHTML='';const st=$('stage');st.innerHTML='';const k=sprImg('kb_idle',KAI,'kai');k.id='sKai';st.appendChild(k);const m=sprImg('mb_fly',MOCHI,'mochi');m.id='sMochi';st.appendChild(m);
+  view('vBattle');bgArt(B.kind);$('foes').innerHTML='';const st=$('stage');st.innerHTML='';const sh=document.createElement('div');sh.className='ksh';sh.id='sKaiSh';st.appendChild(sh);const k=sprImg('kb_idle',KAI,'kai');k.id='sKai';st.appendChild(k);const m=sprImg('mb_fly',MOCHI,'mochi');m.id='sMochi';st.appendChild(m);
   if(S.relics.includes('charm'))B.p.block=6;
   if(!M.tut){M.tut=1;saveM();talk([['mochi',0,'카이, 싸움은 카드로 해! 손에 든 카드를 누르면 바로 써.'],['mochi',0,'적 머리 위 글자가 다음 행동이야. "공격 6"이면 6만큼 때리니까 막기로 방어해!'],['kai',0,'에너지는 한 턴에 3. 다 쓰면 턴 종료를 누르면 되지?'],['mochi',1,'맞아! 일섬은 금빛 칸에서 멈추면 큰 피해를 줘!']],startTurn)}
   else startTurn();
@@ -1788,13 +1789,16 @@ function clawFx(d){const k=$('sKai');if(!k)return;const r=rectIn(k);[0,1,2].forE
 function shieldHit(){const k=$('sKai');if(!k)return;const r=rectIn(k);ringFx(r.cx,r.cy,r.h*.9,'#8ad0ff');sparks(r.cx+r.w*.3,r.cy,'#bfe6ff',6);shake(3,160)}
 function shieldFx(){const k=$('sKai');if(!k)return;const r=rectIn(k);addFx('shield','left:'+r.cx+'px;top:'+r.cy+'px;width:'+r.h*.95+'px;height:'+r.h*.95+'px','',650)}
 function auraFx(col){const k=$('sKai');if(!k)return;const r=rectIn(k);col=col||'#ffd45e';ringFx(r.cx,r.cy,r.h*.8,col);for(let i=0;i<8;i++)setTimeout(()=>{const e=addFx('spark','left:'+(r.x+Math.random()*r.w)+'px;top:'+(r.y+r.h*.9)+'px;--c:'+col,'',800);e.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-'+(r.h*.8)+'px)',opacity:0}],{duration:700,fill:'forwards'})},i*45)}
-function attackAnim(T,impact,done,ult){const k=$('sKai');if(!k||!B){impact();done();return}
-  const kr=rectIn(k);let tx,ty;if(T&&T.el&&!T.dead){const fr=rectIn(T.el.querySelector('.fs')||T.el);tx=fr.cx-kr.cx;ty=(fr.y+fr.h*1.08)-(kr.y+kr.h)}else{tx=kr.pw*.52-kr.cx;ty=kr.ph*.5-(kr.y+kr.h)}
-  clearTimeout(kaiPose.t);k.src=ASSET+'kb_atk.png';SFX.sel();const D=ult?680:560;
-  k.animate([{transform:'none'},{transform:'translate('+tx*.4+'px,'+(ty*.5-30)+'px) scale(.86)',offset:.14},{transform:'translate('+tx+'px,'+ty+'px) scale(.7)',offset:.27},{transform:'translate('+tx+'px,'+ty+'px) scale(.7)',offset:.6},{transform:'translate('+tx*.3+'px,'+(ty*.3-14)+'px) scale(.9)',offset:.8},{transform:'none'}],{duration:D,easing:'ease-out'});
-  sparks(kr.cx,kr.y+kr.h*.95,'#e8dcc0',6,.6);
-  setTimeout(()=>{if(!B){done();return}impact();renderB()},D*.27);
-  setTimeout(()=>{if($('sKai'))k.src=ASSET+'kb_idle.png'},D);setTimeout(()=>setTimeout(done,Math.max(0,((B&&B.hitN)||1)-1)*110+60),D)}
+function bgArt(k){const el=$('bBg');el.innerHTML='';const im=new Image();im.alt='';im.className='art';im.src=ASSET+((k==='boss'||k==='mid')?'bg_boss1.webp':'bg_field1.webp');im.onerror=()=>{im.onerror=null;im.src=ASSET+'bg_battle1.webp'};el.appendChild(im)}
+function attackAnim(T,impact,done,ult){const k=$('sKai'),sh=$('sKaiSh');if(!k||!B){impact();done();return}
+  const kr=rectIn(k);let tx,ty;if(T&&T.el&&!T.dead){const fr=rectIn(T.el.querySelector('.fs')||T.el);tx=fr.cx-kr.cx;ty=(fr.y+fr.h*1.04)-(kr.y+kr.h)}else{tx=kr.pw*.52-kr.cx;ty=kr.ph*.5-(kr.y+kr.h)}ty=Math.max(ty,kr.ph*.6-(kr.y+kr.h));
+  clearTimeout(kaiPose.t);SFX.sel();const D=ult?700:600,S1=.24;
+  const kf=[{transform:'none'},{transform:'translate('+tx*.08+'px,6px) scale(1.02)',offset:.05},{transform:'translate('+tx*.6+'px,'+ty*.6+'px) scale(.8)',offset:S1*.7},{transform:'translate('+tx+'px,'+ty+'px) scale(.68)',offset:S1},{transform:'translate('+tx+'px,'+ty+'px) scale(.68)',offset:.6},{transform:'translate('+tx*.25+'px,'+ty*.25+'px) scale(.92)',offset:.84},{transform:'none'}];
+  k.animate(kf,{duration:D,easing:'ease-in-out'});if(sh)sh.animate(kf,{duration:D,easing:'ease-in-out'});
+  for(let i=0;i<4;i++)setTimeout(()=>sparks(kr.cx+tx*i/5,kr.y+kr.h*.97+ty*i/5,'#e8dcc0',3,.4),i*35);
+  setTimeout(()=>{k.src=ASSET+'kb_atk.png'},D*S1-40);
+  setTimeout(()=>{if(!B){done();return}impact();renderB()},D*S1);
+  setTimeout(()=>{if($('sKai'))k.src=ASSET+'kb_idle.png'},D*.66);setTimeout(()=>setTimeout(done,Math.max(0,((B&&B.hitN)||1)-1)*110+60),D)}
 function foeLunge(f,impact){const el=f.el,fs=el&&el.querySelector('.fs'),k=$('sKai');if(!fs||!k){impact();return}const fr=rectIn(fs),kr=rectIn(k);const dx=(kr.cx-fr.cx)*.75,dy=Math.max(10,(kr.y+kr.h*.6)-(fr.y+fr.h));
   el.animate([{transform:'translateX(-50%)'},{transform:'translateX(-50%) translateY(-10px)',offset:.18},{transform:'translateX(calc(-50% + '+dx+'px)) translateY('+dy+'px) scale(1.3)',offset:.42},{transform:'translateX(calc(-50% + '+dx+'px)) translateY('+dy+'px) scale(1.3)',offset:.55},{transform:'translateX(-50%)'}],{duration:560,easing:'ease-in-out'});
   setTimeout(impact,235)}
