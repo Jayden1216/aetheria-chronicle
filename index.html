@@ -1665,7 +1665,7 @@ const CARDS={
  resolve:{n:'결의',c:1,t:'pow',r:2,ex:1,d:u=>`매 턴 시작 방어 ${3+u*2}`,f:u=>{addSt(B.p,'plate',3+u*2);SFX.buff()}},
  lunch:{n:'리나의 도시락',c:0,t:'skl',r:2,ex:1,d:u=>`HP ${6+u*4} 회복. 소멸`,f:u=>heal(6+u*4)},
  gale:{n:'질풍',c:1,t:'atk',r:2,d:u=>`피해 ${3+u} ×3`,f:(u,T)=>{for(let i=0;i<3;i++)hit(T,3+u)}},
- cleave:{n:'대지 가르기',c:3,t:'atk',r:2,cut:1,quake:1,imgf:'c_cleave.png',sfx:'대지 가르기!!',d:u=>`피해 ${26+u*8}`,f:(u,T)=>hit(T,26+u*8)},
+ cleave:{n:'대지 가르기',c:3,t:'atk',r:2,quake:1,d:u=>`피해 ${26+u*8}`,f:(u,T)=>hit(T,26+u*8)},
  tempest:{n:'천풍난무',c:3,t:'atk',r:3,ult:1,all:1,img:'u_tempest',sfx:'천풍난무!!',d:u=>`필살기. 모든 적에게 피해 ${12+u*4} ×2`,f:u=>{for(let k=0;k<2;k++)alive().forEach(e=>hit(e,12+u*4))}},
  fang:{n:'용아일섬',c:3,t:'atk',r:3,ult:1,img:'u_fang',sfx:'용아일섬!!',d:u=>`필살기. 적 하나에게 피해 ${40+u*12}`,f:(u,T)=>hit(T,40+u*12)},
  poisonblade:{n:'독칼 찌르기',c:1,t:'atk',r:1,d:u=>`피해 4, 화상 ${4+u*2}`,f:(u,T)=>{hit(T,4);addSt(T,'poison',4+u*2)}}
@@ -1818,7 +1818,7 @@ function dealTo(T,d){const b=Math.min(T.block,d);T.block-=b;d-=b;T.hp-=d;const n
   if(T.hp<=0){T.hp=0;T.dead=true;if(S.relics.includes('hook'))S.gold+=8}
   if(T.k==='king'&&!T.split&&!T.dead&&T.hp<=T.max/2){T.split=true;setTimeout(()=>{talk([['narr',0,'슬라임 킹의 몸이 부르르 떨리더니 작은 슬라임들이 튀어나왔다!'],['mochi',2,'분열했어! 전체 공격으로 한꺼번에 처리해!']],()=>{B.foes.push(mkFoe('slime'),mkFoe('slimeb'),mkFoe('slime'));renderB()})},300)}
   renderB()}
-function hurtMe(d,raw){const p=B.p;const b=Math.min(p.block,d);p.block-=b;d-=b;if(d>0){S.hp=Math.max(0,S.hp-d);SFX.hurt();buzz(30);kaiPose('hurt',450);fx($('stage'),'red',400);clawFx(d)}else{shieldHit()}pop('me',d>0?'-'+d:'막힘',d>0?'#ff6a7a':'#8ad0ff');renderB()}
+function hurtMe(d,raw){const p=B.p;const b=Math.min(p.block,d);p.block-=b;d-=b;if(d>0){S.hp=Math.max(0,S.hp-d);SFX.hurt();buzz(30);kaiPose('hurt',450);fx($('stage'),'red',400);clawFx(d)}else{shieldHit()}pop('me',d>0?'-'+d:'막힘',d>0?'#ff6a7a':'#8ad0ff');renderB();if(S.hp<=0){const tryEnd=()=>{if(!B)return;if(busy){setTimeout(tryEnd,300);return}checkEnd()};setTimeout(tryEnd,600)}}
 let tgtCard=null;
 function playCard(i,T){const c=B.hand[i],d=CARDS[c.id];if(busy)return;if(d.c>B.p.energy){toast('에너지가 부족해요');return}
   const needT=d.t==='atk'&&!d.all||c.id==='expose';const foes=alive();
@@ -1826,7 +1826,8 @@ function playCard(i,T){const c=B.hand[i],d=CARDS[c.id];if(busy)return;if(d.c>B.p
   tgtCard=null;B.p.energy-=d.c;B.hand.splice(i,1);(d.ex?B.ex:B.disc).push(c);B.hitN=0;renderB();
   if(c.id==='issen'){d.f(c.u,T);return}
   busy=true;const done=()=>{busy=false;renderB();setTimeout(()=>{if(!checkEnd())autoEnd()},150)};
-  if(d.ult||d.cut){ultimate(c,d,T,done);return}
+  if(d.ult){ultimate(c,d,T,done);return}
+  if(d.quake){B.fxCol='#ffb060';attackAnim(T,()=>{quakeFx(T);d.f(c.u,T)},()=>{if(B)B.fxCol=null;done()});return}
   if(d.t==='atk'){attackAnim(d.all?null:T,()=>d.f(c.u,T),done);return}
   if(d.t==='pow'||c.id==='cheer'){mochiCheer();auraFx()}else if(c.id==='lunch')auraFx('#7af08a');else if(c.id==='expose'&&T){const r=rectIn(T.el.querySelector('.fs'));ringFx(r.cx,r.cy,r.h*1.1,'#ff6a3a')}else if(c.id==='breath')auraFx('#bfe6ff');else shieldFx();
   d.f(c.u,T);renderB();setTimeout(done,280)}
@@ -1967,6 +1968,7 @@ function start(){
   const go=()=>pickHeat(h=>{newRun(h);chapterTitle(()=>{showMap();if(!M.mapTut){M.mapTut=1;saveM();talk([['mochi',1,'여기가 탑의 1층! 위로 갈수록 강한 적이 나와.'],['mochi',0,'갈림길은 직접 골라. 🔥는 모닥불, 💰는 상점, ❓는 무슨 일이 생길지 몰라!'],['kai',0,'15층의 주인을 쓰러뜨리면 다음 장으로 간다. 가자, 모찌!']])}})});
   if(!M.intro){M.intro=true;saveM();playCut(PAGES,go)}else go();
 }
+window.__adv={get B(){return B},get S(){return S}};
 window.CARTS.adv={label:'결정',a:()=>{if(!$('dlg').classList.contains('hide')){nextLine();return}if(gz){issenStop();return}if(cur==='vCut'){cutNext();return}if(cur==='vBattle'&&B&&!busy)endTurn()},
  b:()=>{if(!$('panel').classList.contains('hide')&&$('pBody').querySelector('#pClose')){closePanel();return}if(S&&(cur==='vMap'||cur==='vBattle'))showDeck()},up:()=>{},down:()=>{},enter:()=>{if(!S&&!B)start()}};
 })();</script>
