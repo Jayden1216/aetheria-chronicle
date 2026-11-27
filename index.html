@@ -386,7 +386,13 @@ canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 @keyframes khurt2{20%{transform:translateY(5%) rotate(-3deg)}40%{transform:translateX(-4%)}60%{transform:translateX(3%)}}
 #scrAdv .me{left:3%!important;width:48%!important;top:calc(60% - 34px)!important}
 #scrAdv .foes{z-index:2}
-#scrAdv .bbg .art{object-position:50% 35%;filter:brightness(.92) saturate(1.05)!important;image-rendering:pixelated}
+#scrAdv .bbg .art{object-position:50% 35%;filter:none!important;image-rendering:pixelated}
+#scrAdv .stage img,#scrAdv .foe .fs{image-rendering:pixelated;image-rendering:crisp-edges}
+#scrAdv .stage .kai,#scrAdv .foe .fs,#scrAdv .stage .mochi{filter:none!important}
+#scrAdv .stage .mochi{height:20%!important}
+#scrAdv .foe::before{content:"";position:absolute;left:50%;bottom:-3%;width:78%;height:16%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,#000a,#0004 60%,#0000);pointer-events:none}
+#scrAdv .foe.die::before{display:none}
+#scrAdv .stage .ksh{background:radial-gradient(closest-side,#000a,#0004 60%,#0000)!important}
 #scrAdv .stage .ksh{position:absolute;left:29.5%;bottom:6%;width:17%;height:3.2%;border-radius:50%;background:radial-gradient(#0007,#0000 70%);transform-origin:50% 50%;z-index:1}
 /* tower */
 #scrTower .hp{color:#ff7a8a;letter-spacing:1px}
@@ -1789,7 +1795,7 @@ function clawFx(d){const k=$('sKai');if(!k)return;const r=rectIn(k);[0,1,2].forE
 function shieldHit(){const k=$('sKai');if(!k)return;const r=rectIn(k);ringFx(r.cx,r.cy,r.h*.9,'#8ad0ff');sparks(r.cx+r.w*.3,r.cy,'#bfe6ff',6);shake(3,160)}
 function shieldFx(){const k=$('sKai');if(!k)return;const r=rectIn(k);addFx('shield','left:'+r.cx+'px;top:'+r.cy+'px;width:'+r.h*.95+'px;height:'+r.h*.95+'px','',650)}
 function auraFx(col){const k=$('sKai');if(!k)return;const r=rectIn(k);col=col||'#ffd45e';ringFx(r.cx,r.cy,r.h*.8,col);for(let i=0;i<8;i++)setTimeout(()=>{const e=addFx('spark','left:'+(r.x+Math.random()*r.w)+'px;top:'+(r.y+r.h*.9)+'px;--c:'+col,'',800);e.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-'+(r.h*.8)+'px)',opacity:0}],{duration:700,fill:'forwards'})},i*45)}
-function bgArt(k){const el=$('bBg');el.innerHTML='';const im=new Image();im.alt='';im.className='art';im.src=ASSET+((k==='boss'||k==='mid')?'bg_boss1.webp':'bg_field1.webp');im.onerror=()=>{im.onerror=null;im.src=ASSET+'bg_battle1.webp'};el.appendChild(im)}
+function bgArt(k){const el=$('bBg');el.innerHTML='';const im=new Image();im.alt='';im.className='art';im.src=ASSET+((k==='boss'||k==='mid')?'bg_boss1.png':'bg_field1.png');im.onerror=()=>{im.onerror=null;im.src=ASSET+'bg_battle1.webp'};el.appendChild(im)}
 function attackAnim(T,impact,done,ult){const k=$('sKai'),sh=$('sKaiSh');if(!k||!B){impact();done();return}
   const kr=rectIn(k);let tx,ty;if(T&&T.el&&!T.dead){const fr=rectIn(T.el.querySelector('.fs')||T.el);tx=fr.cx-kr.cx;ty=(fr.y+fr.h*1.04)-(kr.y+kr.h)}else{tx=kr.pw*.52-kr.cx;ty=kr.ph*.5-(kr.y+kr.h)}ty=Math.max(ty,kr.ph*.6-(kr.y+kr.h));
   clearTimeout(kaiPose.t);SFX.sel();const D=ult?700:600,S1=.24;
