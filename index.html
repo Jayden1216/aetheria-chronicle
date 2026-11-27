@@ -394,6 +394,11 @@ canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 #scrAdv .foe.die::before{display:none}
 #scrAdv .stage .ksh{background:radial-gradient(closest-side,#000a,#0004 60%,#0000)!important}
 #scrAdv .stage .ksh{position:absolute;left:29.5%;bottom:6%;width:17%;height:3.2%;border-radius:50%;background:radial-gradient(#0007,#0000 70%);transform-origin:50% 50%;z-index:1}
+#scrMenu .wmap{touch-action:none;cursor:grab}
+#scrMenu .pin{width:max-content!important;max-width:none!important;min-width:0!important;margin:0!important;height:auto!important}
+#scrMenu .pin.lock .pi{filter:grayscale(.85) brightness(.8);animation:none}
+#scrMenu .pin.lock .pn{border-color:#8888;color:#cfd0dd}
+#scrMenu .pin.lock .pn::after{content:"준비 중";position:absolute;top:-9px;right:-8px;background:#555a78;color:#fff;font:400 9px GB,G;padding:1px 4px;border-radius:4px}
 /* tower */
 #scrTower .hp{color:#ff7a8a;letter-spacing:1px}
 #scrTower .boss{top:44px;left:6px;right:6px;padding:5px 9px}
@@ -1904,9 +1909,9 @@ function render(){
   const I=info();
   const sub={adv:(rd('aeth_adv_meta').clear1?'제1장 클리어':'제1장 초원의 층 · 체험판'),tower:'최고 '+I.best+'층 · 보스 '+I.bosses+'마리',fish:'도감 '+I.dex+'/12 · 편지 '+I.got+'/5',forge:'제작 '+I.made+'회 · 용사 장비 '+I.gear+'종'};
   const PIN={adv:[64.5,36,'🏰','탑'],tower:[43,47,'🗡️','등대 수련장'],fish:[28.5,66,'🎣','물빛 마을'],forge:[86,27,'🔨','화산 대장간']};
-  $('carts').innerHTML=CARTS_LIST.map((c,i)=>{const p=PIN[c.id];return '<button class="opt pin'+(c.id==='adv'?' main':'')+(rd('aeth_seen_'+c.id).v?'':' new')+'" data-i="'+i+'" style="left:'+p[0]+'%;top:'+p[1]+'%;--c:'+c.c+'"><span class="pi">'+p[2]+'</span><span class="pn">'+esc(c.name)+'<small>'+esc(p[3]+' · '+sub[c.id])+'</small></span></button>'}).join('');
+  $('carts').innerHTML=CARTS_LIST.map((c,i)=>{const p=PIN[c.id];return '<button class="opt pin'+(c.id==='adv'?' main':'')+(c.id!=='adv'?' lock':rd('aeth_seen_'+c.id).v?'':' new')+'" data-i="'+i+'" style="left:'+p[0]+'%;top:'+p[1]+'%;--c:'+c.c+'"><span class="pi">'+p[2]+'</span><span class="pn">'+esc(c.name)+'<small>'+esc(p[3]+' · '+sub[c.id])+'</small></span></button>'}).join('');
   const wm=$('wmap');if(wm)[30,200].forEach(t=>setTimeout(()=>{wm.scrollLeft=wm.firstElementChild.offsetWidth*.62-wm.clientWidth/2},t));
-  $('links').innerHTML='<b>세계의 연결</b><br><span class="k">탑 → 마을</span> 편지 '+I.avail+'통이 바다로 떠내려옴<br><span class="k">마을 → 탑</span> '+(I.buffs.length?esc(I.buffs.join(', ')):'마을을 키우면 용사가 강해져요')+'<br><span class="k">대장간 → 탑·마을</span> '+(I.gear||I.rod?'장비 '+I.gear+'종, 낚싯대 +'+I.rod:'물고기 재료로 장비를 벼려요');
+  $('links').innerHTML='<b>지금 열린 곳</b><br>🏰 용사의 모험: 2장 업데이트 준비 중<br>🎣 물빛 마을, 🔨 화산 대장간, 🗡️ 등대 수련장: 새 버전으로 다시 만드는 중이에요';if(0)$('links').innerHTML='<b>세계의 연결</b><br><span class="k">탑 → 마을</span> 편지 '+I.avail+'통이 바다로 떠내려옴<br><span class="k">마을 → 탑</span> '+(I.buffs.length?esc(I.buffs.join(', ')):'마을을 키우면 용사가 강해져요')+'<br><span class="k">대장간 → 탑·마을</span> '+(I.gear||I.rod?'장비 '+I.gear+'종, 낚싯대 +'+I.rod:'물고기 재료로 장비를 벼려요');
 }
 let msgT=null;
 function flashMsg(t){$('links').innerHTML='<b>알림</b><br>'+esc(t);clearTimeout(msgT);msgT=setTimeout(render,1800)}
@@ -1926,7 +1931,13 @@ function start(i){const id=CARTS_LIST[i].id;try{localStorage.setItem('aeth_seen_
 const canSel=id=>!(id==='menu'||id==='intro'||(id==='adv'&&!rd('aeth_adv_meta').clear1));
 const MENU={a:()=>start(sel),b:()=>{},up:()=>{sel=(sel+CARTS_LIST.length-1)%CARTS_LIST.length;render();tone(880,.03)},down:()=>{sel=(sel+1)%CARTS_LIST.length;render();tone(880,.03)}};
 window.CARTS.menu=MENU;
-$('carts').addEventListener('pointerdown',e=>{const b=e.target.closest('.opt');if(!b)return;e.preventDefault();sel=+b.dataset.i;render();start(sel)});
+const READY={adv:1};
+(()=>{const wm=$('wmap');let d=null;
+  wm.addEventListener('pointerdown',e=>{d={x:e.clientX,s:wm.scrollLeft,m:0,id:e.pointerId,b:e.target.closest('.opt')};try{wm.setPointerCapture(e.pointerId)}catch(_){} });
+  wm.addEventListener('pointermove',e=>{if(!d||e.pointerId!==d.id)return;const dx=e.clientX-d.x;if(Math.abs(dx)>6)d.m=1;wm.scrollLeft=d.s-dx});
+  const end=e=>{if(!d)return;const t=d;d=null;if(t.m||!t.b||e.type==='pointercancel')return;const i=+t.b.dataset.i,id=CARTS_LIST[i].id;
+    if(!READY[id]){flashMsg(CARTS_LIST[i].name+'은(는) 새 버전으로 다시 만드는 중이에요. 조금만 기다려 주세요!');return}sel=i;start(i)};
+  wm.addEventListener('pointerup',end);wm.addEventListener('pointercancel',end)})();
 
 // intro
 
@@ -1946,7 +1957,7 @@ $('bB').addEventListener('pointerdown',e=>{e.preventDefault();$('bB').classList.
 $('dU').addEventListener('pointerdown',e=>{e.preventDefault();cur().up()});
 $('dD').addEventListener('pointerdown',e=>{e.preventDefault();cur().down()});
 $('bSel').addEventListener('pointerdown',e=>{e.preventDefault();if(canSel(window.CART))go('menu')});
-M.addEventListener('pointerdown',e=>{if(e.target.closest('.opt'))return;e.preventDefault()});
+M.addEventListener('pointerdown',e=>{if(e.target.closest('#wmap'))return;e.preventDefault()});
 addEventListener('keydown',e=>{const k=e.code;
   if(k==='Space'||k==='Enter'||k==='KeyA'){e.preventDefault();if(e.repeat)return;window.pressFxA(true);cur().a()}
   else if(k==='KeyB'||k==='Escape'){if(!e.repeat)cur().b()}
