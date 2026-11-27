@@ -412,7 +412,7 @@ canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 #scrSea .seaDepth .col{position:relative;flex:1;width:10px;border:2px solid #fff;border-radius:6px;background:linear-gradient(#5ad0ff,#1a4a90 60%,#0a1638)}
 #scrSea .seaDepth i{position:absolute;left:50%;width:18px;height:4px;background:#ff4a5a;transform:translate(-50%,-50%);border:1px solid #fff}
 #scrSea .seaDepth i b{position:absolute;right:20px;top:-8px;font:400 11px GB,G;color:#fff;white-space:nowrap;background:#0b1638e6;padding:1px 4px;border-radius:5px}
-#scrSea .seaRing{position:absolute;left:50%;top:22%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;z-index:4;background:#0b1638cc;border:2px solid #fff6;border-radius:14px;padding:8px 12px}
+#scrSea .seaRing{position:absolute;left:58%;top:36%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;z-index:4;background:#0b1638cc;border:2px solid #fff6;border-radius:14px;padding:8px 12px}
 #scrSea .pwBar{position:relative;width:14px;height:90px;border:2px solid #fff;border-radius:6px;background:#0b1638;overflow:hidden}
 #scrSea .pwBar i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#ff5a5a,#ffd45e,#5ad07a)}
 #scrSea .ring{position:relative;width:90px;height:90px;border-radius:50%;background:#16224e;border:3px solid #fff}
@@ -1984,15 +1984,15 @@ const meta=()=>load('aeth_adv_meta')||{};
 // ---------- data (마을 선착장)
 // d: depth range m, x: distance range (0~1 of the sea), act: favourite action, w: weight, str: fight strength
 const FISH=[
- {id:'sardine',n:'은빛 정어리',d:[0,7],x:[.05,1],act:'twitch',w:40,str:1,sz:[12,20],v:5,col:'#c8d8e8',len:9,info:'얕은 곳에서 떼 지어 다녀요.'},
- {id:'mackerel',n:'줄무늬 고등어',d:[3,13],x:[.15,1],act:'reel',w:30,str:2,sz:[25,40],v:12,col:'#4a7ab8',len:12,info:'쭉 감아 주는 미끼를 쫓아요.'},
- {id:'puffer',n:'꼬마 복어',d:[2,10],x:[.05,.6],act:'twitch',w:16,str:1,sz:[8,15],v:18,col:'#e8c870',len:8,info:'톡톡 튀는 미끼에 화가 나서 물어요.'},
- {id:'wrasse',n:'무지개 놀래기',d:[6,16],x:[.2,.85],act:'twitch',w:13,str:2,sz:[15,28],v:28,col:'#e070b0',len:10,info:'반짝이는 움직임을 좋아해요.'},
- {id:'bream',n:'빨간 도미',d:[10,22],x:[.35,1],act:'reel',w:14,str:3,sz:[30,55],v:35,col:'#e05050',len:13,info:'조금 깊은 곳, 천천히 감으면 따라와요.'},
- {id:'scorpion',n:'바위 쏨뱅이',d:[17,30],x:[.3,1],act:'still',w:9,str:3,sz:[20,35],v:40,col:'#8a5a3a',len:11,info:'바닥에 가만히 둔 미끼를 노려요.'},
- {id:'slimefish',n:'슬라임 피쉬',d:[13,26],x:[.5,1],act:'twitch',w:6,str:2,sz:[20,30],v:50,col:'#7ad050',len:10,info:'슬라임 킹을 약하게 만드는 해독제 재료예요.',key:1},
- {id:'marlin',n:'달빛 청새치',d:[8,24],x:[.82,1],act:'reel',w:2.5,str:5,sz:[150,250],v:300,col:'#3a5ad8',len:26,info:'NICE CAST로 아주 멀리 던져야 만날 수 있어요.',legend:1},
- {id:'bottle',n:'편지 병',d:[0,1],x:[.35,1],act:'any',w:0,str:1,sz:[0,0],v:0,col:'#a0e0d0',len:7,info:'탑에서 카이가 보낸 편지가 들어 있어요.'}];
+ {id:'sardine',n:'은빛 정어리',d:[0,7],x:[.05,1],act:'twitch',w:40,str:1,sz:[12,20],v:5,col:'#c8d8e8',len:10,info:'얕은 곳에서 떼 지어 다녀요.'},
+ {id:'mackerel',n:'줄무늬 고등어',d:[3,13],x:[.15,1],act:'reel',w:30,str:2,sz:[25,40],v:12,col:'#4a7ab8',len:14,info:'쭉 감아 주는 미끼를 쫓아요.'},
+ {id:'puffer',n:'꼬마 복어',d:[2,10],x:[.05,.6],act:'twitch',w:16,str:1,sz:[8,15],v:18,col:'#e8c870',len:9,info:'톡톡 튀는 미끼에 화가 나서 물어요.'},
+ {id:'wrasse',n:'무지개 놀래기',d:[6,16],x:[.2,.85],act:'twitch',w:13,str:2,sz:[15,28],v:28,col:'#e070b0',len:12,info:'반짝이는 움직임을 좋아해요.'},
+ {id:'bream',n:'빨간 도미',d:[10,22],x:[.35,1],act:'reel',w:14,str:3,sz:[30,55],v:35,col:'#e05050',len:14,info:'조금 깊은 곳, 천천히 감으면 따라와요.'},
+ {id:'scorpion',n:'바위 쏨뱅이',d:[17,30],x:[.3,1],act:'still',w:9,str:3,sz:[20,35],v:40,col:'#8a5a3a',len:12,info:'바닥에 가만히 둔 미끼를 노려요.'},
+ {id:'slimefish',n:'슬라임 피쉬',d:[13,26],x:[.5,1],act:'twitch',w:6,str:2,sz:[20,30],v:50,col:'#7ad050',len:11,info:'슬라임 킹을 약하게 만드는 해독제 재료예요.',key:1},
+ {id:'marlin',n:'달빛 청새치',d:[8,24],x:[.82,1],act:'reel',w:2.5,str:5,sz:[150,250],v:300,col:'#3a5ad8',len:30,info:'NICE CAST로 아주 멀리 던져야 만날 수 있어요.',legend:1},
+ {id:'bottle',n:'편지 병',d:[0,1],x:[.35,1],act:'any',w:0,str:1,sz:[0,0],v:0,col:'#a0e0d0',len:9,info:'탑에서 카이가 보낸 편지가 들어 있어요.'}];
 const FI=Object.fromEntries(FISH.map(f=>[f.id,f]));
 const ACTN={twitch:'톡톡',reel:'감기',still:'가만히',any:'아무거나'};
 const LETTERS=[
@@ -2000,9 +2000,10 @@ const LETTERS=[
  ['리나에게','광산 입구에서 도깨비 광부들이 반짝이는 걸 훔쳐 간대. 보석처럼 빛나는 미끼는 조심해서 써. 모찌가 바다 냄새가 그립다고 울었어.'],
  ['리나에게','탑 꼭대기 번개가 조금 약해진 것 같아. 리나가 낚은 물고기 덕분에 힘이 나! 슬라임 피쉬는 꼭 아껴 둬, 해독제로 쓴대.']];
 // ---------- world (art pixels)
-const H=173,WW=404,SURF=48,PIER=34;
-const seabed=x=>SURF+lerp(48,116,clamp(x/WW,0,1))+Math.sin(x*.07)*2;
-const MAXD=30,depthOf=(x,y)=>clamp((y-SURF)/(SURF+116-SURF)*MAXD,0,MAXD),yOf=(x,d)=>Math.min(SURF+d/MAXD*116,seabed(x)-2);
+const H=173,WW=404,SURF=52,PIER=118,DEEP=112,RX=104,RY=47;
+const seabed=x=>x<PIER?140:lerp(140,164,clamp((x-PIER)/(WW-PIER),0,1))+Math.sin(x*.07)*1.5;
+const MAXD=30,depthOf=(x,y)=>clamp((y-SURF)/DEEP*MAXD,0,MAXD),yOf=(x,d)=>Math.min(SURF+d/MAXD*DEEP,seabed(x)-2);
+const TIP={rina_idle:[21,18],rina_cast:[3,6],rina_reel:[24,9],rina_win:null};let tip=[RX,RY-20];
 // ---------- canvas
 const cv=$('seaCv'),ctx=cv.getContext('2d'),lo=document.createElement('canvas'),lx=lo.getContext('2d');let VW=104,P=4;
 function resize(){const r=cv.getBoundingClientRect();if(!r.width)return;const dpr=Math.min(3,window.devicePixelRatio||1);cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);P=r.height/H;VW=Math.ceil(r.width/P);lo.width=VW;lo.height=H}
@@ -2021,7 +2022,7 @@ function spawnFish(){const pool=FISH.filter(f=>f.w>0||(f.id==='bottle'&&SV.lette
   const x=lerp(PIER+8,WW-6,rnd(sp.x[0],sp.x[1]));const d=rnd(sp.d[0],sp.d[1]);return {f:sp,x,y:yOf(x,d),dir:Math.random()<.5?-1:1,sp:rnd(3,7)*(sp.legend?1.6:1),int:0,flee:0,bob:Math.random()*6}}
 function lettersAvail(){const m=meta();return m.clear1?3:0}
 function newSession(){bait=10;catches=[];fishes=Array.from({length:9},spawnFish);SV.sessions++;saveV();ready()}
-function ready(){st='ready';lure=null;cast=null;hooked=null;biter=null;fight=null;rinaPose='idle';camX=0;nice=false;hold=false;setCtl('ready')}
+function ready(){st='ready';lure=null;cast=null;hooked=null;biter=null;fight=null;rinaPose='idle';camX=clamp(RX-VW*.3,0,WW-VW);nice=false;hold=false;setCtl('ready')}
 // ---------- controls
 function setCtl(m){const c=$('seaCtl');ui.mode=m;const B=(id,txt,cls)=>'<button class="sb '+(cls||'')+'" id="'+id+'">'+txt+'</button>';
   const hints={ready:'꾹 눌러 힘을 모으고, 링이 금빛일 때 손을 떼면 NICE CAST!',sink:'누르고 있는 동안 미끼가 가라앉아요. 원하는 깊이에서 손을 떼세요.',act:'물고기마다 좋아하는 움직임이 달라요. 톡톡, 감기, 가만히 두기!',bite:'지금! 챔질!',fight:'누르면 감기. 줄이 빨개지거나 "달아나요!"가 뜨면 손을 떼세요.'};
@@ -2036,7 +2037,7 @@ function press(id,down){if(pressed[id]===down)return;pressed[id]=down;
   else if(st==='bite'&&down){hookIt()}
   else if(st==='fight'&&id==='sbMain')hold=down}
 function throwLure(){$('seaRing').classList.add('hide');const a=((cast.ang-cast.gold)%360+360)%360;nice=a<52;const pw=cast.pw;let dist=lerp(.12,.62,pw)*(WW-PIER);if(nice){dist*=1.5;big('NICE CAST!','#ffd45e');SFX.nice()}
-  const tx=clamp(PIER+dist,PIER+12,WW-4);cast.fly={t:0,x0:PIER-10,y0:SURF-30,x1:tx};st='fly';SFX.cast();setCtl('');rinaPose='idle'}
+  const tx=clamp(PIER+dist,PIER+12,WW-4);cast.fly={t:0,x0:tip[0],y0:tip[1],x1:tx};st='fly';SFX.cast();setCtl('');rinaPose='idle'}
 function twitch(){if(!lure)return;SFX.twitch();lure.x=Math.max(PIER,lure.x-2.5);lure.y=Math.max(SURF+1,lure.y-1.5);lure.tw=.25;fishes.forEach(F=>{if(near(F))F.int+=F.f.act==='twitch'?.42:F.f.act==='any'?.5:F.f.act==='reel'?.08:-.2})}
 function near(F){if(F.flee>0||!lure)return false;const dx=lure.x-F.x,dy=lure.y-F.y;const dd=Math.abs(depthOf(0,lure.y)-depthOf(0,F.y));return Math.hypot(dx,dy*1.4)<30&&(dd<5||Math.hypot(dx,dy)<12)}
 function hookIt(){const dt=T-biter.t0;const perfect=dt<.32;SFX.hit();buzz(40);big(perfect?'PERFECT HIT!':'HIT!',perfect?'#ffd45e':'#fff');hooked=biter.F;biter=null;
@@ -2068,7 +2069,7 @@ function update(dt){T+=dt;flash=Math.max(0,flash-dt);
     const t=clamp(g.prog/100,0,1);lure.x=lerp(g.hx,PIER+4,t)+(g.surge>0?Math.sin(T*30)*1.5:0);lure.y=lerp(g.hy,SURF+1,t*t);hooked.x=lure.x;hooked.y=lure.y;hooked.dir=g.surge>0?1:-1;
     if(g.ten>=100){SFX.snap();buzz(120);big('줄이 끊어졌어요…','#ff8080');lost()}else if(g.prog<=0){big('놓쳤어요…','#bfd0ff');lost()}else if(g.prog>=100){landed()}}
   // camera
-  const tx=lure?clamp(lure.x-VW*.45,0,WW-VW):0;camX+=(tx-camX)*Math.min(1,dt*(st==='fly'?6:3));
+  const tx=lure?clamp(lure.x-VW*.45,0,WW-VW):clamp(RX-VW*.3,0,WW-VW);camX+=(tx-camX)*Math.min(1,dt*(st==='fly'?6:3));
 }
 let splashes=[];function splash(x){for(let i=0;i<10;i++)splashes.push({x,y:SURF,vx:rnd(-12,12),vy:rnd(-30,-12),t:.6})}
 function lost(){const F=hooked;hooked=null;fight=null;$('seaFight').classList.add('hide');if(F){F.flee=3;F.dir=1}endCast(null)}
@@ -2080,7 +2081,7 @@ function endCast(f){st='result';setCtl('');bait--;
   if(f.id==='bottle'){const L=LETTERS[SV.letters]||LETTERS[0];SV.letters++;extra='<div class="letter"><b>'+esc(L[0])+'</b><p>'+esc(L[1])+'</p><i>카이가</i></div>'}
   if(isNew&&f.id!=='bottle')extra+='<p class="sx">📖 새로운 물고기! 카이 최대 HP +1</p>';
   saveV();catches.push({f,size});
-  const im=fishImg(f);const art=im?'<img src="'+im.src+'" alt="">':'<canvas id="seaFb" width="'+f.len+'" height="'+Math.ceil(f.len*.5)+'"></canvas>';
+  const im=fishImg(f);const art=im?'<img src="'+ASSET+'fb_'+f.id+'.png" alt="">':'<canvas id="seaFb" width="'+f.len+'" height="'+Math.ceil(f.len*.5)+'"></canvas>';
   showCard('<div class="cc'+(f.legend?' legend':'')+'">'+(isNew?'<span class="new">NEW</span>':'')+'<div class="cart">'+art+'</div><h3>'+esc(f.n)+'</h3>'+(size?'<p class="sz">'+size+' cm'+(rec.max===size&&!isNew?' · 최고 기록!':'')+'</p>':'')+'<p class="in">'+esc(f.info)+'</p><p class="pr">좋아하는 움직임: <b>'+ACTN[f.act]+'</b> · 💰 +'+f.v+'</p>'+extra+'<button class="sb big" id="seaNext">'+(bait>0?'계속 낚기 (미끼 '+bait+')':'오늘의 결과 보기')+'</button></div>');
   const fc=$('seaFb');if(fc)drawFishFB(fc.getContext('2d'),f,0,0,-1);$('seaNext').onclick=()=>{hideCard();afterCast()}}
 function afterCast(){if(bait>0)ready();else summary()}
@@ -2093,7 +2094,7 @@ function summary(){st='menu';setCtl('');const tot=catches.reduce((s,c)=>s+c.f.v,
 function menu(){st='menu';setCtl('');const m=meta();
   showCard('<div class="cc menu"><h3>물빛 마을 선착장</h3><p class="in">리나의 낚시터예요. 한 번에 미끼 10개로 낚시해요.</p><div class="spots"><span class="on">🌊 마을 선착장</span><span>🔒 강 하구</span><span>🔒 먼바다</span><span>🔒 얼음 호수</span><span>🔒 용암 웅덩이</span></div><p class="pr">도감 '+dexCount()+'/8 · 💰 '+SV.coins+(SV.items.slimefish?' · 🧪 '+SV.items.slimefish:'')+'</p><button class="sb big" id="seaGo">🎣 낚시 시작</button><button class="sb" id="seaDex">📖 도감</button></div>');
   $('seaGo').onclick=()=>{hideCard();newSession()};$('seaDex').onclick=dex}
-function dex(){const back=st;showCard('<div class="cc"><h3>물고기 도감 '+dexCount()+'/8</h3><div class="dex">'+FISH.map(f=>{const r=SV.dex[f.id],im=fishImg(f);return '<div class="dx'+(r?'':' no')+'">'+(im?'<img src="'+im.src+'" alt="">':'<i style="background:'+f.col+'"></i>')+'<b>'+(r?esc(f.n):'???')+'</b><small>'+(r?(r.max?'최대 '+r.max+'cm · ':'')+ACTN[f.act]:f.d[0]+'~'+f.d[1]+'m')+'</small></div>'}).join('')+'</div><button class="sb big" id="seaDexX">닫기</button></div>');
+function dex(){const back=st;showCard('<div class="cc"><h3>물고기 도감 '+dexCount()+'/8</h3><div class="dex">'+FISH.map(f=>{const r=SV.dex[f.id],im=fishImg(f);return '<div class="dx'+(r?'':' no')+'">'+(im?'<img src="'+ASSET+'fb_'+f.id+'.png" alt="">':'<i style="background:'+f.col+'"></i>')+'<b>'+(r?esc(f.n):'???')+'</b><small>'+(r?(r.max?'최대 '+r.max+'cm · ':'')+ACTN[f.act]:f.d[0]+'~'+f.d[1]+'m')+'</small></div>'}).join('')+'</div><button class="sb big" id="seaDexX">닫기</button></div>');
   $('seaDexX').onclick=()=>{if(back==='menu')menu();else hideCard()}}
 // ---------- draw
 function drawBg(){const bg=IM.bg;if(bg){lx.drawImage(bg,-Math.round(camX),0,WW,H);return}
@@ -2109,11 +2110,11 @@ function draw(){if(!cv.width)return;lx.imageSmoothingEnabled=false;lx.clearRect(
   fishes.forEach(F=>{const f=F.f,shown=F===hooked||(biter&&biter.F===F)||f.id==='bottle';const im=shown?fishImg(f):null;const s=shown&&!im?fbCan(f):sil(f);const w=(im||s).width,h=(im||s).height;const x=Math.round(F.x-cx-w/2),y=Math.round(F.y-h/2+Math.sin(F.bob*3)*.5);if(x>VW+30||x<-w-30)return;
     lx.save();lx.globalAlpha=shown?1:clamp(.25+.4*(1-depthOf(0,F.y)/MAXD),.2,.6);if(F.dir>0){lx.translate(x+w,y);lx.scale(-1,1);lx.drawImage(im||s,0,0)}else lx.drawImage(im||s,x,y);lx.restore()});
   // rina
-  const rp={idle:'rina_idle',cast:'rina_cast',reel:'rina_reel',win:'rina_win'}[rinaPose],ri_=IM[rp]||IM.rina_idle;const rx=12-cx,ry=SURF-6;let tipX=rx+16,tipY=ry-30;
-  if(ri_){const h=34,w=Math.round(ri_.width*h/ri_.height);lx.drawImage(ri_,rx-Math.round(w/2),ry-h,w,h);tipX=rx+Math.round(w*.48);tipY=ry-h+2}else{lx.fillStyle='#e8c070';lx.fillRect(rx-4,ry-26,9,4);lx.fillStyle='#3a8a4a';lx.fillRect(rx-3,ry-16,7,12);lx.fillStyle='#f0d0b0';lx.fillRect(rx-2,ry-22,5,6);line(rx+3,ry-14,tipX,tipY,'#8a5a3a')}
-  if(rinaPose==='cast'){tipX=rx-8;tipY=ry-34}
+  const rp={idle:'rina_idle',cast:'rina_cast',reel:'rina_reel',win:'rina_win'}[rinaPose],ri_=IM[rp]||IM.rina_idle;const rx=RX-cx,ry=RY;let tipX=rx+10,tipY=ry-18;
+  if(ri_){const w=ri_.width,h=ri_.height,x0=rx-Math.round(w/2),y0=ry-h;lx.drawImage(ri_,x0,y0);const t=TIP[IM[rp]?rp:'rina_idle']||TIP.rina_idle;tipX=x0+t[0];tipY=y0+t[1]}else{lx.fillStyle='#e8c070';lx.fillRect(rx-4,ry-26,9,4);lx.fillStyle='#3a8a4a';lx.fillRect(rx-3,ry-16,7,12);lx.fillStyle='#f0d0b0';lx.fillRect(rx-2,ry-22,5,6);line(rx+3,ry-14,tipX,tipY,'#8a5a3a')}
+  tip=[tipX+cx,tipY];
   // line & lure
-  if(lure){const lxp=lure.x-cx,lyp=lure.y;line(tipX,tipY,lxp,lyp,'#ffffffaa');lx.fillStyle=lure.tw?'#fff':'#ff4a5a';lx.fillRect(Math.round(lxp)-1,Math.round(lyp)-1,3,2);if(lure.tw){lx.fillStyle='#ffffff88';lx.fillRect(Math.round(lxp)-3,Math.round(lyp)-3,7,1)}}
+  if(lure){const lxp=lure.x-cx,lyp=lure.y;if(rinaPose!=='win')line(tipX,tipY,lxp,lyp,'#ffffffaa');lx.fillStyle=lure.tw?'#fff':'#ff4a5a';lx.fillRect(Math.round(lxp)-1,Math.round(lyp)-1,3,2);if(lure.tw){lx.fillStyle='#ffffff88';lx.fillRect(Math.round(lxp)-3,Math.round(lyp)-3,7,1)}}
   splashes.forEach(p=>{p.t-=1/60;p.x+=p.vx/60;p.y+=p.vy/60;p.vy+=90/60;lx.fillStyle='#e8fbff';lx.fillRect(Math.round(p.x-cx),Math.round(p.y),1,1)});splashes=splashes.filter(p=>p.t>0);
   ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,cv.width,cv.height);ctx.drawImage(lo,0,0,VW,H,0,0,VW*P*(cv.width/cv.getBoundingClientRect().width),cv.height);
   // HUD
