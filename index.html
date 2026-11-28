@@ -2039,8 +2039,8 @@ const FISH=[
  {id:'mackerel',n:'줄무늬 고등어',d:[3,13],x:[.15,1],act:'reel',w:30,str:2,sz:[25,40],v:12,col:'#4a7ab8',len:14,info:'쭉 감아 주는 미끼를 쫓아요.'},
  {id:'puffer',n:'꼬마 복어',d:[2,10],x:[.05,.6],act:'twitch',w:16,str:1,sz:[8,15],v:18,col:'#e8c870',len:9,info:'톡톡 튀는 미끼에 화가 나서 물어요.'},
  {id:'wrasse',n:'무지개 놀래기',d:[6,16],x:[.2,.85],act:'twitch',w:13,str:2,sz:[15,28],v:28,col:'#e070b0',len:12,info:'반짝이는 움직임을 좋아해요.'},
- {id:'bream',n:'빨간 도미',d:[10,22],x:[.35,1],act:'reel',w:14,str:3,sz:[30,55],v:35,col:'#e05050',len:14,info:'조금 깊은 곳, 천천히 감으면 따라와요.'},
- {id:'scorpion',n:'바위 쏨뱅이',d:[17,30],x:[.3,1],act:'still',w:9,str:3,sz:[20,35],v:40,col:'#8a5a3a',len:12,info:'바닥에 가만히 둔 미끼를 노려요.'},
+ {id:'bream',n:'빨간 도미',d:[10,22],x:[.35,1],act:'reel',w:14,str:3,sz:[30,55],v:35,col:'#e05050',len:14,info:'조금 깊은 곳, 천천히 감으면 따라와요. 구우면 보스전 도시락이 돼요.'},
+ {id:'scorpion',n:'바위 쏨뱅이',d:[17,30],x:[.3,1],act:'still',w:9,str:3,sz:[20,35],v:40,col:'#8a5a3a',len:12,info:'바닥에 가만히 둔 미끼를 노려요. 가시로 장갑을 만들 수 있어요.'},
  {id:'slimefish',n:'슬라임 피쉬',d:[13,26],x:[.5,1],act:'twitch',w:6,str:2,sz:[20,30],v:50,col:'#7ad050',len:11,info:'슬라임 킹을 약하게 만드는 해독제 재료예요.',key:1},
  {id:'marlin',n:'달빛 청새치',d:[8,24],x:[.82,1],act:'reel',w:2.5,str:5,sz:[150,250],v:300,col:'#3a5ad8',len:30,info:'NICE CAST로 아주 멀리 던져야 만날 수 있어요.',legend:1},
  {id:'bottle',n:'편지 병',d:[0,1],x:[.35,1],act:'any',w:0,str:1,sz:[0,0],v:0,col:'#a0e0d0',len:9,info:'탑에서 카이가 보낸 편지가 들어 있어요.'}];
@@ -2128,7 +2128,9 @@ function landed(){const F=hooked;hooked=null;fight=null;$('seaFight').classList.
 function endCast(f){st='result';setCtl('');bait--;
   if(!f){pend=null;setTimeout(()=>{toastS('아무것도 안 물었어요. 미끼 '+bait+'개 남음');afterCast()},300);return}
   const size=f.sz[1]?ri(f.sz[0],f.sz[1]):0,isNew=!SV.dex[f.id];const rec=SV.dex[f.id]||{n:0,max:0};rec.n++;rec.max=Math.max(rec.max,size);SV.dex[f.id]=rec;SV.coins+=f.v;
-  let extra='';if(f.key){SV.items.slimefish=(SV.items.slimefish||0)+1;extra='<p class="sx">🧪 슬라임 해독제 재료 +1 (슬라임 킹 체력 25% 감소)</p>'}
+  let extra='';if(f.key){SV.items.slimefish=(SV.items.slimefish||0)+1;extra='<p class="sx">🧪 슬라임 해독제 +1 · 슬라임 킹이 약해지고 덜 분열해요</p>'}
+  if(f.id==='scorpion'){SV.items.spine=(SV.items.spine||0)+1;extra='<p class="sx">🧤 가시 장갑 +1 · 가시돌이 대장의 가시 반사 절반</p>'}
+  if(f.id==='bream'){SV.items.bream=(SV.items.bream||0)+1;extra='<p class="sx">🍱 도미구이 +1 · 보스전 시작 때 HP 15 회복</p>'}
   if(f.id==='bottle'){const L=LETTERS[SV.letters]||LETTERS[0];SV.letters++;extra='<div class="letter"><b>'+esc(L[0])+'</b><p>'+esc(L[1])+'</p><i>카이가</i></div>'}
   if(isNew&&f.id!=='bottle')extra+='<p class="sx">📖 새로운 물고기! 카이 최대 HP +1</p>';
   saveV();catches.push({f,size});
@@ -2143,7 +2145,7 @@ function summary(){st='menu';setCtl('');const tot=catches.reduce((s,c)=>s+c.f.v,
   showCard('<div class="cc"><h3>오늘의 낚시 결과</h3><div class="sumList">'+(catches.length?catches.map(c=>'<span>'+esc(c.f.n)+(c.size?' '+c.size+'cm':'')+'</span>').join(''):'<span>빈손이에요… 다음엔 깊이를 바꿔 봐요!</span>')+'</div><p class="pr">💰 +'+tot+' · 도감 '+dexCount()+'/8</p><p class="sx">도감 1종마다 카이의 최대 HP +1 (다음 탑 도전부터)</p><button class="sb big" id="seaAgain">한 번 더 낚기</button><button class="sb" id="seaHome">마을로</button></div>');
   $('seaAgain').onclick=()=>{hideCard();newSession()};$('seaHome').onclick=()=>{hideCard();menu()}}
 function menu(){st='menu';setCtl('');const m=meta();
-  showCard('<div class="cc menu"><h3>물빛 마을 선착장</h3><p class="in">리나의 낚시터예요. 한 번에 미끼 10개로 낚시해요.</p><div class="spots"><span class="on">🌊 마을 선착장</span><span>🔒 강 하구</span><span>🔒 먼바다</span><span>🔒 얼음 호수</span><span>🔒 용암 웅덩이</span></div><p class="pr">도감 '+dexCount()+'/8 · 💰 '+SV.coins+(SV.items.slimefish?' · 🧪 '+SV.items.slimefish:'')+'</p><button class="sb big" id="seaGo">🎣 낚시 시작</button><button class="sb" id="seaDex">📖 도감</button></div>');
+  showCard('<div class="cc menu"><h3>물빛 마을 선착장</h3><p class="in">리나의 낚시터예요. 한 번에 미끼 10개로 낚시해요.</p><div class="spots"><span class="on">🌊 마을 선착장</span><span>🔒 강 하구</span><span>🔒 먼바다</span><span>🔒 얼음 호수</span><span>🔒 용암 웅덩이</span></div><p class="pr">도감 '+dexCount()+'/8 · 💰 '+SV.coins+(SV.items.slimefish?' · 🧪 '+SV.items.slimefish:'')+(SV.items.spine?' · 🧤 '+SV.items.spine:'')+(SV.items.bream?' · 🍱 '+SV.items.bream:'')+'</p><button class="sb big" id="seaGo">🎣 낚시 시작</button><button class="sb" id="seaDex">📖 도감</button></div>');
   $('seaGo').onclick=()=>{hideCard();newSession()};$('seaDex').onclick=dex}
 function dex(){const back=st;showCard('<div class="cc"><h3>물고기 도감 '+dexCount()+'/8</h3><div class="dex">'+FISH.map(f=>{const r=SV.dex[f.id],im=fishImg(f);return '<div class="dx'+(r?'':' no')+'">'+(im?'<img src="'+ASSET+'fb_'+f.id+'.png" alt="">':'<i style="background:'+f.col+'"></i>')+'<b>'+(r?esc(f.n):'???')+'</b><small>'+(r?(r.max?'최대 '+r.max+'cm · ':'')+ACTN[f.act]:f.d[0]+'~'+f.d[1]+'m')+'</small></div>'}).join('')+'</div><button class="sb big" id="seaDexX">닫기</button></div>');
   $('seaDexX').onclick=()=>{if(back==='menu')menu();else hideCard()}}
